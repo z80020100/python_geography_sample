@@ -1,5 +1,6 @@
 # https://geographiclib.sourceforge.io/html/python/code.html
 from geographiclib.geodesic import Geodesic
+from shapely.geometry import Point, Polygon
 
 
 def cal_great_circle_distance_m(lat1, lon1, lat2, lon2):
@@ -29,3 +30,9 @@ def cal_bounding_box_vertices(lat, lon, length_m, azimuth):
         for b in bearings
     ]
     return [(v['lat2'], v['lon2']) for v in vertices]
+
+
+def is_point_inside_polygon(vertices, lat, lon):
+    poly = Polygon(vertices)
+    point = Point(lat, lon)
+    return poly.contains(point)
