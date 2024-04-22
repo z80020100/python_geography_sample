@@ -14,3 +14,18 @@ def cal_azimuth(lat_start, lon_start, lat_end, lon_end):
     # azi1 represents the initial azimuth of the great circle track from point 1 to point 2
     # azi2 represents the final azimuth of the great circle track from point 1 to point 2
     return geo_dict['azi1']
+
+
+def cal_bounding_box_vertices(lat, lon, length_m, azimuth):
+    bearings = [
+        (azimuth + 45) % 360,
+        (azimuth + 135) % 360,
+        (azimuth + 225) % 360,
+        (azimuth + 315) % 360
+    ]
+    vertices = [
+        Geodesic.WGS84.Direct(lat, lon, b, length_m,
+                              Geodesic.LATITUDE | Geodesic.LONGITUDE)
+        for b in bearings
+    ]
+    return [(v['lat2'], v['lon2']) for v in vertices]
